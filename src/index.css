@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-home {
+    background-image: url(./assets/homeBg.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; /* or background-size: contain; depending on your preference */
+}
