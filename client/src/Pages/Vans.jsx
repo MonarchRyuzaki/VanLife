@@ -23,7 +23,7 @@ function Vans() {
   const [allData, setAllData] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/vans");
+      const response = await fetch("https://vanlife-backend.onrender.com/api/vans");
       if (response.ok) {
         const result = await response.json();
         setAllData(result.vans);
