@@ -76,8 +76,14 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/api/vans", async (req, res) => {
-    res.json({vans});
-})
+  res.json({ vans });
+});
+
+app.get("/api/vans/:id", async (req, res) => {
+  const { id } = req.params;
+  const van = vans.find((v) => v.id === id);
+  res.json({ van });
+});
 
 app.listen(8080, () => {
   console.log("Server has started");

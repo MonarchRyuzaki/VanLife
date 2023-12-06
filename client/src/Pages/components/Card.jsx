@@ -1,4 +1,6 @@
 import React from 'react'
+import VansDetailed from '../VansDetailed';
+import { Link } from 'react-router-dom';
 
 function Card({id, name, price, description, imageUrl, type}) {
   let bgColor;
@@ -9,8 +11,9 @@ function Card({id, name, price, description, imageUrl, type}) {
   } else if (type === "rugged") {
     bgColor = "#115E59"
   }
+  const link = "/vans/"+id;
   return (
-    <div className='flex flex-col max-w-[22rem]'>
+    <Link to = {link} className='flex flex-col max-w-[22rem]' element={<VansDetailed />}>
         <img src={imageUrl} alt="" className='h-[22rem] w-[22rem]'/>
         <div className='flex flex-col'>
             <h4 className='text-[#161616] font-inter text-xl font-semibold mt-3'>{name}</h4>
@@ -19,7 +22,7 @@ function Card({id, name, price, description, imageUrl, type}) {
                 <div className='text-center font-inter text-md font-semibold capitalize text-[#FFEAD0] px-6 py-2 rounded-lg' style={{backgroundColor: bgColor}}>{type}</div>
             </div>
         </div>
-    </div>
+    </Link>
   )
 }
 
