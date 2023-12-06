@@ -5,7 +5,7 @@ import Vans from "./Pages/Vans"
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/">
       <div className="w-full overflow-hidden">
         <nav className="bg-[#FFF7ED] flex justify-center items-center px-6 sm:px-16">
           <div className="w-full xl:max-w-[1280px] flex justify-between items-center py-4">
