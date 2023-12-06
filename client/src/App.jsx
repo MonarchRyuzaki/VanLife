@@ -1,11 +1,11 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Link, HashRouter } from "react-router-dom"
 import Home from "./Pages/Home"
 import About from "./Pages/About"
 import Vans from "./Pages/Vans"
 
 function App() {
   return (
-    <BrowserRouter basename="/">
+    <HashRouter basename="/">
       <div className="w-full overflow-hidden">
         <nav className="bg-[#FFF7ED] flex justify-center items-center px-6 sm:px-16">
           <div className="w-full xl:max-w-[1280px] flex justify-between items-center py-4">
@@ -25,7 +25,7 @@ function App() {
           <div className="font-inter font-medium text-[#AAAAAA] py-6">Ⓒ 2022 #VANLIFE</div>
         </footer>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
