@@ -18,6 +18,8 @@ const vans = [
     imageUrl:
       "https://assets.scrimba.com/advanced-react/react-router/modest-explorer.png",
     type: "simple",
+    hostId: "123",
+    bgColor: "#E17654"
   },
   {
     id: "2",
@@ -28,6 +30,8 @@ const vans = [
     imageUrl:
       "https://assets.scrimba.com/advanced-react/react-router/beach-bum.png",
     type: "rugged",
+    hostId: "456",
+    bgColor: "#115E59"
   },
   {
     id: "3",
@@ -38,6 +42,8 @@ const vans = [
     imageUrl:
       "https://assets.scrimba.com/advanced-react/react-router/reliable-red.png",
     type: "luxury",
+    hostId: "789",
+    bgColor: "#161616"
   },
   {
     id: "4",
@@ -48,6 +54,8 @@ const vans = [
     imageUrl:
       "https://assets.scrimba.com/advanced-react/react-router/dreamfinder.png",
     type: "simple",
+    hostId: "123",
+    bgColor: "#E17654"
   },
   {
     id: "5",
@@ -58,6 +66,8 @@ const vans = [
     imageUrl:
       "https://assets.scrimba.com/advanced-react/react-router/the-cruiser.png",
     type: "luxury",
+    hostId: "456",
+    bgColor: "#161616"
   },
   {
     id: "6",
@@ -68,6 +78,8 @@ const vans = [
     imageUrl:
       "https://assets.scrimba.com/advanced-react/react-router/green-wonder.png",
     type: "rugged",
+    hostId: "123",
+    bgColor: "#115E59"
   },
 ];
 
@@ -80,6 +92,17 @@ app.get("/api/vans", async (req, res) => {
 });
 
 app.get("/api/vans/:id", async (req, res) => {
+  const { id } = req.params;
+  const van = vans.find((v) => v.id === id);
+  res.json({ van });
+});
+
+app.get("/api/hosts/vans", async (req, res) => {
+  const van = vans.filter((v) => v.hostId === "456");
+  res.json({ van });
+});
+
+app.get("/api/hosts/vans/:id", async (req, res) => {
   const { id } = req.params;
   const van = vans.find((v) => v.id === id);
   res.json({ van });

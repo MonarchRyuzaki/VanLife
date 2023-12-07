@@ -7,8 +7,10 @@ function VansDetailed() {
   const fetchData = async () => {
     try {
       //const apiUrl = process.env.SERVER_URL || "http://localhost:8080/api";
-    //   const response = await fetch(`http://localhost:8080/api/vans/${id}`);
-      const response = await fetch(`https://vanlife-backend.onrender.com/api/vans/${id}`);
+      //   const response = await fetch(`http://localhost:8080/api/vans/${id}`);
+      const response = await fetch(
+        `https://vanlife-backend.onrender.com/api/vans/${id}`
+      );
       if (response.ok) {
         const result = await response.json();
         setVanData(result.van);
@@ -32,11 +34,12 @@ function VansDetailed() {
     <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
       <div className="w-full xl:max-w-[1280px]">
         <Link
-          to="/vans"
-          className="hover:underline text-sm font-inter font-medium text-[#201F1D] block my-8"
+          to=".."
+          relative="path"
+          // {/* This makes it go one level back urlwise(path) no route hierarchy wise */}
+          className="text-sm font-inter font-medium text-[#201F1D] block my-8"
         >
-          {" "}
-          &lt;- Back to all vans
+          &lt;- <span className="hover:underline">Back to all vans</span>
         </Link>
         <div className="flex flex-col lg:flex-row justify-center items-center gap-4 my-[50px]">
           <img

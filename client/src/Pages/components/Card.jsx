@@ -11,7 +11,7 @@ function Card({id, name, price, description, imageUrl, type}) {
   } else if (type === "rugged") {
     bgColor = "#115E59"
   }
-  const link = "/vans/"+id;
+  const link = "./"+id;
   return (
     <Link to = {link} className='flex flex-col max-w-[22rem]' element={<VansDetailed />}>
         <img src={imageUrl} alt="" className='h-[22rem] w-[22rem]'/>

@@ -1,34 +1,54 @@
-import { BrowserRouter, Routes, Route, Link, HashRouter } from "react-router-dom"
-import Home from "./Pages/Home"
-import About from "./Pages/About"
-import Vans from "./Pages/Vans"
-import VansDetailed from "./Pages/VansDetailed"
+import {
+  BrowserRouter,
+  HashRouter,
+  Link,
+  Route,
+  Routes,
+} from "react-router-dom";
+import About from "./Pages/About";
+import Home from "./Pages/Home";
+import HostLayout from "./Pages/HostLayout";
+import Vans from "./Pages/Vans";
+import VansDetailed from "./Pages/VansDetailed";
+import Dashboard from "./Pages/components/Dashboard";
+import Income from "./Pages/components/Income";
+import Layout from "./Pages/components/Layout";
+import Reviews from "./Pages/components/Reviews";
+import ListedVans from "./Pages/components/ListedVans";
+import ListedVansDetails from "./Pages/components/ListedVansDetails";
+import ListedVanDetails from "./Pages/components/ListedVanDetails";
+import ListedVansPricing from "./Pages/components/ListedVansPricing";
+import ListedVansPhotos from "./Pages/components/ListedVansPhotos";
 
 function App() {
   return (
     <HashRouter>
       <div className="w-full overflow-hidden">
-        <nav className="bg-[#FFF7ED] flex justify-center items-center px-6 sm:px-16">
-          <div className="w-full xl:max-w-[1280px] flex justify-between items-center py-4">
-            <Link to="/" className="font-inter font-extrabold text-[26px] leading-[40px]">#VANLIFE</Link>
-            <div>
-              <Link to="/about" className="font-inter font-semibold text-[16px] leading-[22.92px] mr-4 md:mr-8 hover:underline">About</Link>
-              <Link to="/Vans" className="font-inter font-semibold text-[16px] leading-[22.92px] hover:underline">Vans</Link>
-            </div>
-          </div>
-        </nav>
+        {/* Path that starts with '/' is absolute path  */}
+        {/* Path that starts with name is reative to its parent */}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/Vans" element={<Vans />} />
-          <Route path="/vans/:id" element={<VansDetailed />} />
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="host" element={<HostLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="income" element={<Income />} />
+              <Route path="vans" element={<ListedVans />} />
+              <Route path="vans/:id" element={<ListedVansDetails />}>
+                <Route index element={<ListedVanDetails />}/>
+                <Route path="pricing" element={<ListedVansPricing />}/>
+                <Route path="photos" element={<ListedVansPhotos />}/>
+              </Route>
+              <Route path="reviews" element={<Reviews />} />
+            </Route>
+            <Route path="about" element={<About />} />
+            {/* Since There is no Shared layout bw Vans and VansDetailed We dont need to make a hole */}
+            <Route path="vans" element={<Vans />} />
+            <Route path="vans/:id" element={<VansDetailed />} />
+          </Route>
         </Routes>
-        <footer className="bg-[#252525] flex justify-center items-center">
-          <div className="font-inter font-medium text-[#AAAAAA] py-6">Ⓒ 2022 #VANLIFE</div>
-        </footer>
       </div>
     </HashRouter>
-  )
+  );
 }
 
-export default App
+export default App;

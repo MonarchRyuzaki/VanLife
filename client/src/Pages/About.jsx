@@ -30,7 +30,7 @@ function About() {
               Your van is ready.
             </h3>
             <Link
-              to="/vans"
+              to="../vans"
               className="font-inter font-bold bg-[#161616] text-white px-16 py-3 text-center rounded-lg max-w-[350px]"
             >
               Explore our Vans

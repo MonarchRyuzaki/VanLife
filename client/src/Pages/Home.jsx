@@ -14,7 +14,7 @@ function Home() {
               the perfect van to make your perfect road trip.
             </p>
             <Link
-              to="/vans"
+              to="vans"
               className="font-inter font-bold bg-[#FF8C38] text-white px-16 py-3 text-center md:max-w-[400px]"
             >
               Find your van
