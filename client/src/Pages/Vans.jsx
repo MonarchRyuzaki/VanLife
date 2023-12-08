@@ -1,7 +1,29 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 import Buttons from "./components/Buttons";
 import Card from "./components/Card";
+
+const getVansData = async () => {
+  try {
+    const response = await fetch(
+      "https://vanlife-backend.onrender.com/api/vans"
+    );
+    if (response.ok) {
+      const res = await response.json();
+      return res.vans;
+    }
+  } catch (error) {
+    throw {
+      message: error.message,
+      statusText: response.statusText,
+      status: response.status,
+    };
+  }
+};
+
+export function loader() {
+  return getVansData();
+}
 
 const idx = (type) => {
   if (type === "simple") return 0;
@@ -16,30 +38,14 @@ const initialFilters = [
 ];
 
 function Vans() {
+  const allData = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
-  const typeFilters = searchParams.get("type")?.split(',') || [];  // Extract multiple filters
+  const typeFilters = searchParams.get("type")?.split(",") || []; // Extract multiple filters
   const [isActive, setIsActive] = useState(initialFilters);
-  const [allData, setAllData] = useState([]);
-  const fetchData = async () => {
-    try {
-      // const response = await fetch("http://localhost:8080/api/vans");
-      const response = await fetch(
-        "https://vanlife-backend.onrender.com/api/vans"
-      );
-      if (response.ok) {
-        const result = await response.json();
-        setAllData(result.vans);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
-  const displayedVans = typeFilters.length > 0
-    ? allData.filter((c) => typeFilters.includes(c.type.toLowerCase()))
-    : allData;
+  const displayedVans =
+    typeFilters.length > 0
+      ? allData.filter((c) => typeFilters.includes(c.type.toLowerCase()))
+      : allData;
   return (
     <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
       <div className="w-full xl:max-w-[1280px]">
@@ -104,7 +110,7 @@ function Vans() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 my-8 gap-8">
           {displayedVans.map((obj) => {
-            return <Card {...obj} key={obj.id} searchParams={searchParams}/>;
+            return <Card {...obj} key={obj.id} searchParams={searchParams} />;
           })}
         </div>
       </div>
