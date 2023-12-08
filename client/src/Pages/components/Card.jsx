@@ -2,7 +2,7 @@ import React from 'react'
 import VansDetailed from '../VansDetailed';
 import { Link } from 'react-router-dom';
 
-function Card({id, name, price, description, imageUrl, type}) {
+function Card({id, name, price, description, imageUrl, type, searchParams}) {
   let bgColor;
   if (type === "simple") {
     bgColor = "#E17654"
@@ -11,9 +11,8 @@ function Card({id, name, price, description, imageUrl, type}) {
   } else if (type === "rugged") {
     bgColor = "#115E59"
   }
-  const link = "./"+id;
   return (
-    <Link to = {link} className='flex flex-col max-w-[22rem]' element={<VansDetailed />}>
+    <Link to = {id} state = {{search : searchParams.toString(), type: type}} className='flex flex-col max-w-[22rem]' element={<VansDetailed />}>
         <img src={imageUrl} alt="" className='h-[22rem] w-[22rem]'/>
         <div className='flex flex-col'>
             <h4 className='text-[#161616] font-inter text-xl font-semibold mt-3'>{name}</h4>

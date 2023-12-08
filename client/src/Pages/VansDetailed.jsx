@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 function VansDetailed() {
   const { id } = useParams();
   const [vanData, setVanData] = useState({});
   const fetchData = async () => {
     try {
-      //const apiUrl = process.env.SERVER_URL || "http://localhost:8080/api";
+      // const apiUrl = process.env.SERVER_URL || "http://localhost:8080/api";
       //   const response = await fetch(`http://localhost:8080/api/vans/${id}`);
       const response = await fetch(
         `https://vanlife-backend.onrender.com/api/vans/${id}`
@@ -22,6 +22,10 @@ function VansDetailed() {
   useEffect(() => {
     fetchData();
   }, [id]);
+  const {state} = useLocation();
+  const search = state ? (state.search.length>0 ? state.search : "") : "";
+  const backLink = `..?${search}`
+  const backText = state ? (state.type.length > 0 ? state.type : "") : "";
   let bgColor;
   if (vanData.type === "simple") {
     bgColor = "#E17654";
@@ -34,12 +38,12 @@ function VansDetailed() {
     <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
       <div className="w-full xl:max-w-[1280px]">
         <Link
-          to=".."
+          to={backLink}
           relative="path"
           // {/* This makes it go one level back urlwise(path) no route hierarchy wise */}
           className="text-sm font-inter font-medium text-[#201F1D] block my-8"
         >
-          &lt;- <span className="hover:underline">Back to all vans</span>
+          &lt;- <span className="hover:underline">Back</span>
         </Link>
         <div className="flex flex-col lg:flex-row justify-center items-center gap-4 my-[50px]">
           <img

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import Buttons from "./components/Buttons";
 import Card from "./components/Card";
 
@@ -8,22 +9,23 @@ const idx = (type) => {
   if (type === "rugged") return 2;
 };
 
+const initialFilters = [
+  { id: "simple", isActive: false },
+  { id: "luxury", isActive: false },
+  { id: "rugged", isActive: false },
+];
+
 function Vans() {
-  const initialFilters = [
-    { id: "simple", isActive: false },
-    { id: "luxury", isActive: false },
-    { id: "rugged", isActive: false },
-  ];
+  const [searchParams, setSearchParams] = useSearchParams();
+  const typeFilters = searchParams.get("type")?.split(',') || [];  // Extract multiple filters
   const [isActive, setIsActive] = useState(initialFilters);
-  const [filter, setIsFilter] = useState({
-    simple: false,
-    luxury: false,
-    rugged: false,
-  });
   const [allData, setAllData] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await fetch("https://vanlife-backend.onrender.com/api/vans");
+      // const response = await fetch("http://localhost:8080/api/vans");
+      const response = await fetch(
+        "https://vanlife-backend.onrender.com/api/vans"
+      );
       if (response.ok) {
         const result = await response.json();
         setAllData(result.vans);
@@ -35,15 +37,9 @@ function Vans() {
   useEffect(() => {
     fetchData();
   }, []);
-  const willShow = (type) => {
-    if (
-      isActive[idx(type)].isActive === true ||
-      (isActive[0].isActive === isActive[1].isActive &&
-        isActive[1].isActive === isActive[2].isActive)
-    )
-      return true;
-  };
-  const clearFilters = () => setIsActive(initialFilters);
+  const displayedVans = typeFilters.length > 0
+    ? allData.filter((c) => typeFilters.includes(c.type.toLowerCase()))
+    : allData;
   return (
     <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
       <div className="w-full xl:max-w-[1280px]">
@@ -59,7 +55,7 @@ function Vans() {
                 activeColor={"#E17654"}
                 isActive={isActive}
                 setIsActive={setIsActive}
-                setIsFilter={setIsFilter}
+                setSearchParams={setSearchParams}
               />
               <Buttons
                 name={"Luxury"}
@@ -67,7 +63,7 @@ function Vans() {
                 activeColor={"#161616"}
                 isActive={isActive}
                 setIsActive={setIsActive}
-                setIsFilter={setIsFilter}
+                setSearchParams={setSearchParams}
               />
             </div>
             <div className="flex justify-between">
@@ -77,23 +73,38 @@ function Vans() {
                 activeColor={"#115e59"}
                 isActive={isActive}
                 setIsActive={setIsActive}
-                setIsFilter={setIsFilter}
+                setSearchParams={setSearchParams}
               />
-              <button className="max-w-[90px] xs:hidden" onClick={clearFilters}>
+              {typeFilters && (
+                <button
+                  onClick={() => {
+                    setIsActive(initialFilters);
+                    setSearchParams({});
+                  }}
+                  to=""
+                  className="max-w-[90px] xs:hidden"
+                >
+                  <div className="underline text-#[161616]">Clear Filters</div>
+                </button>
+              )}
+            </div>
+            {typeFilters && (
+              <button
+                onClick={() => {
+                  setIsActive(initialFilters);
+                  setSearchParams({});
+                }}
+                to="."
+                className="max-w-[90px] hidden xs:block ml-auto"
+              >
                 <div className="underline text-#[161616]">Clear Filters</div>
               </button>
-            </div>
-            <button
-              className="max-w-[90px] hidden xs:block ml-auto"
-              onClick={clearFilters}
-            >
-              <div className="underline text-#[161616]">Clear Filters</div>
-            </button>
+            )}
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 my-8 gap-8">
-          {allData.map((obj) => {
-            if (willShow(obj.type)) return <Card {...obj} key={obj.id} />;
+          {displayedVans.map((obj) => {
+            return <Card {...obj} key={obj.id} searchParams={searchParams}/>;
           })}
         </div>
       </div>

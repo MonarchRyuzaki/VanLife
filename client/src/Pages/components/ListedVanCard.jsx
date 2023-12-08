@@ -2,9 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const ListedVanCard = ({ id, name, price, imageUrl }) => {
-  const link = "./" + id;
   return (
-    <Link to={link}>
+    <Link to={id}>
       <div className="w-full flex gap-6 bg-white p-6">
         <img src={imageUrl} alt="" className="w-[120px] h-[120px]" />
         <div className="flex flex-col justify-center">
