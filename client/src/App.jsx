@@ -13,12 +13,13 @@ import VansDetailed from "./Pages/VansDetailed";
 import Dashboard from "./Pages/components/Dashboard";
 import Income from "./Pages/components/Income";
 import Layout from "./Pages/components/Layout";
-import Reviews from "./Pages/components/Reviews";
+import ListedVanDetails from "./Pages/components/ListedVanDetails";
 import ListedVans from "./Pages/components/ListedVans";
 import ListedVansDetails from "./Pages/components/ListedVansDetails";
-import ListedVanDetails from "./Pages/components/ListedVanDetails";
-import ListedVansPricing from "./Pages/components/ListedVansPricing";
 import ListedVansPhotos from "./Pages/components/ListedVansPhotos";
+import ListedVansPricing from "./Pages/components/ListedVansPricing";
+import NotFound from "./Pages/components/NotFound";
+import Reviews from "./Pages/components/Reviews";
 
 function App() {
   return (
@@ -34,9 +35,9 @@ function App() {
               <Route path="income" element={<Income />} />
               <Route path="vans" element={<ListedVans />} />
               <Route path="vans/:id" element={<ListedVansDetails />}>
-                <Route index element={<ListedVanDetails />}/>
-                <Route path="pricing" element={<ListedVansPricing />}/>
-                <Route path="photos" element={<ListedVansPhotos />}/>
+                <Route index element={<ListedVanDetails />} />
+                <Route path="pricing" element={<ListedVansPricing />} />
+                <Route path="photos" element={<ListedVansPhotos />} />
               </Route>
               <Route path="reviews" element={<Reviews />} />
             </Route>
@@ -44,6 +45,7 @@ function App() {
             {/* Since There is no Shared layout bw Vans and VansDetailed We dont need to make a hole */}
             <Route path="vans" element={<Vans />} />
             <Route path="vans/:id" element={<VansDetailed />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </div>
