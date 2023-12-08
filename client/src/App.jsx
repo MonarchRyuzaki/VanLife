@@ -1,7 +1,7 @@
 import {
   Route,
   RouterProvider,
-  createBrowserRouter,
+  createHashRouter,
   createRoutesFromElements,
 } from "react-router-dom";
 import About from "./Pages/About";
@@ -20,7 +20,7 @@ import ListedVansPricing from "./Pages/components/ListedVansPricing";
 import NotFound from "./Pages/components/NotFound";
 import Reviews from "./Pages/components/Reviews";
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       {/* Path that starts with '/' is absolute path  */}
