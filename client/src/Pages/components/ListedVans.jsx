@@ -1,18 +1,31 @@
 import React, { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
 import ListedVanCard from "./ListedVanCard";
 
-function ListedVans() {
-  const [vans, setVans] = useState([]);
-  const fetchData = async () => {
-    const response = await fetch("https://vanlife-backend.onrender.com/api/hosts/vans");
+const fetchData = async () => {
+  let response; // Declare response outside the try block
+  try {
+    response = await fetch("https://vanlife-backend.onrender.com/api/hosts/vans");
     if (response.ok) {
       const res = await response.json();
-      setVans(res.van);
+      return res.van;
     }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  } catch (error) {
+    // Access response.statusText and response.status here
+    throw {
+      message: "Failed to fetch Vans",
+      statusText: response ? response.statusText : "Unknown",
+      status: response ? response.status : 500,
+    };
+  }
+};
+
+export function loader(){
+  return fetchData();
+}
+
+function ListedVans() {
+  const vans = useLoaderData()
   return (
     <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
       <div className="w-full xl:max-w-[1280px]">

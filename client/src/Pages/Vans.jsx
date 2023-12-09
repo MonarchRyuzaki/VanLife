@@ -4,19 +4,19 @@ import Buttons from "./components/Buttons";
 import Card from "./components/Card";
 
 const getVansData = async () => {
+  let response; // Declare response outside the try block
   try {
-    const response = await fetch(
-      "https://vanlife-backend.onrender.com/api/vans"
-    );
+    response = await fetch("https://vanlife-backend.onrender.com/api/vans");
     if (response.ok) {
       const res = await response.json();
       return res.vans;
     }
   } catch (error) {
+    // Access response.statusText and response.status here
     throw {
-      message: error.message,
-      statusText: response.statusText,
-      status: response.status,
+      message: "Failed to fetch Vans",
+      statusText: response ? response.statusText : "Unknown",
+      status: response ? response.status : 500,
     };
   }
 };

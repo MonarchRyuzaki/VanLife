@@ -1,6 +1,11 @@
 import React from "react";
 import { useOutletContext } from "react-router-dom";
 
+export async function loader(){
+  return null;
+}
+
+
 const ListedVanDetails = () => {
   const { name, type, description } = useOutletContext();
 

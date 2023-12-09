@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useParams } from "react-router-dom";
+import { Link, NavLink, Outlet, useLoaderData, useParams } from "react-router-dom";
+
+
+const fetchData = async (id) => {
+  const response = await fetch("https://vanlife-backend.onrender.com/api/hosts/vans/" + id);
+  if (response.ok) {
+    const res = await response.json();
+    return res.van
+  }
+};
+
+export async function loader({params}){
+  return fetchData(params.id);
+}
 
 const ListedVansDetails = () => {
-  const { id } = useParams();
-  const [data, setData] = useState([]);
-  const fetchData = async () => {
-    const response = await fetch("https://vanlife-backend.onrender.com/api/hosts/vans/" + id);
-    if (response.ok) {
-      const res = await response.json();
-      setData(res.van);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const data = useLoaderData()
   const activeStyle = {
     color: "#161616",
     fontWeight: 600,

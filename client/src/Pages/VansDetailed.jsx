@@ -1,30 +1,31 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLoaderData, useLocation, useParams } from "react-router-dom";
+
+const fetchData = async (id) => {
+  try {
+    // const apiUrl = process.env.SERVER_URL || "http://localhost:8080/api";
+    //   const response = await fetch(`http://localhost:8080/api/vans/${id}`);
+    const response = await fetch(
+      `https://vanlife-backend.onrender.com/api/vans/${id}`
+    );
+    if (response.ok) {
+      const result = await response.json();
+      return result.van;
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export async function loader({ params }) {
+  return fetchData(params.id);
+}
 
 function VansDetailed() {
-  const { id } = useParams();
-  const [vanData, setVanData] = useState({});
-  const fetchData = async () => {
-    try {
-      // const apiUrl = process.env.SERVER_URL || "http://localhost:8080/api";
-      //   const response = await fetch(`http://localhost:8080/api/vans/${id}`);
-      const response = await fetch(
-        `https://vanlife-backend.onrender.com/api/vans/${id}`
-      );
-      if (response.ok) {
-        const result = await response.json();
-        setVanData(result.van);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, [id]);
-  const {state} = useLocation();
-  const search = state ? (state.search.length>0 ? state.search : "") : "";
-  const backLink = `..?${search}`
+  const vanData = useLoaderData();
+  const { state } = useLocation();
+  const search = state ? (state.search.length > 0 ? state.search : "") : "";
+  const backLink = `..?${search}`;
   const backText = state ? (state.type.length > 0 ? state.type : "") : "";
   let bgColor;
   if (vanData.type === "simple") {

@@ -1,6 +1,10 @@
 import React from 'react'
 import { useOutletContext } from 'react-router-dom'
 
+export async function loader(){
+  return null;
+}
+
 const ListedVansPhotos = () => {
     const {imageUrl} = useOutletContext();
   return (
