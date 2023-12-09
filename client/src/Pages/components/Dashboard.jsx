@@ -1,7 +1,8 @@
 import React from 'react'
+import { requireAuth } from '../../utils';
 
 export async function loader(){
-  return null;
+  return await requireAuth();
 }
 
 function Dashboard() {

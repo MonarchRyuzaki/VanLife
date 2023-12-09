@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import ListedVanCard from "./ListedVanCard";
+import { requireAuth } from "../../utils";
 
 const fetchData = async () => {
   let response; // Declare response outside the try block
@@ -20,7 +21,8 @@ const fetchData = async () => {
   }
 };
 
-export function loader(){
+export async function loader(){
+  await requireAuth();
   return fetchData();
 }
 

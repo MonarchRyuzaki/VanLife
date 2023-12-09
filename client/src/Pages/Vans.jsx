@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 import Buttons from "./components/Buttons";
 import Card from "./components/Card";
+import { requireAuth } from "../utils";
 
 const getVansData = async () => {
   let response; // Declare response outside the try block
@@ -21,7 +22,8 @@ const getVansData = async () => {
   }
 };
 
-export function loader() {
+export async function loader() {
+  await requireAuth()
   return getVansData();
 }
 
@@ -46,6 +48,9 @@ function Vans() {
     typeFilters.length > 0
       ? allData.filter((c) => typeFilters.includes(c.type.toLowerCase()))
       : allData;
+  useEffect(() => {
+    localStorage.clear("filterStates")
+  },[])
   return (
     <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
       <div className="w-full xl:max-w-[1280px]">

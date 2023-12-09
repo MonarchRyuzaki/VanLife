@@ -1,8 +1,9 @@
 import React from "react";
 import { useOutletContext } from "react-router-dom";
+import { requireAuth } from "../../utils";
 
 export async function loader(){
-  return null;
+  return await requireAuth()
 }
 
 

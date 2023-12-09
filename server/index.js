@@ -83,12 +83,14 @@ const vans = [
   },
 ];
 
+const user = [{ id: "123", email: "b@b.com", password: "q123", name: "Bob" }];
+
 app.get("/", async (req, res) => {
   res.send("Working");
 });
 
 app.get("/api/vans", async (req, res) => {
-  res.json({ vans});
+  res.json({ vans });
 });
 
 app.get("/api/vans/:id", async (req, res) => {
@@ -106,6 +108,35 @@ app.get("/api/hosts/vans/:id", async (req, res) => {
   const { id } = req.params;
   const van = vans.find((v) => v.id === id);
   res.json({ van });
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const foundUser = user.find(
+      (u) => u.email === email && u.password === password
+    );
+
+    if (!foundUser) {
+      // If user is not found, return a 401 Unauthorized status
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Remove the password from the user object before sending it in the response
+    const userWithoutPassword = { ...foundUser };
+    delete userWithoutPassword.password;
+
+    return res.json({
+      user: userWithoutPassword,
+      token: "Enjoy your pizzas",
+    });
+  } catch (error) {
+    // Log the error for debugging purposes
+    console.error("Error during login:", error);
+
+    // Return a 500 Internal Server Error status and an error message
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
 app.listen(8080, () => {

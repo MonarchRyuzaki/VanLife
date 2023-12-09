@@ -7,7 +7,7 @@ import {
 import About from "./Pages/About";
 import Home from "./Pages/Home";
 import HostLayout from "./Pages/HostLayout";
-import Login from "./Pages/Login";
+import Login, { loginLoader } from "./Pages/Login";
 import Vans, { loader as vansLoader } from "./Pages/Vans";
 import VansDetailed, {
   loader as vansDetailedLoader,
@@ -82,7 +82,7 @@ const router = createHashRouter(
         loader={vansDetailedLoader}
         errorElement={<Error />}
       />
-      <Route path="login" element={<Login />} />
+      <Route path="login" element={<Login />} loader = {loginLoader}/>
       <Route path="*" element={<NotFound />} />
     </Route>
   )

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLoaderData, useParams } from "react-router-dom";
+import { requireAuth } from "../../utils";
 
 
 const fetchData = async (id) => {
@@ -11,6 +12,7 @@ const fetchData = async (id) => {
 };
 
 export async function loader({params}){
+  await requireAuth()
   return fetchData(params.id);
 }
 
