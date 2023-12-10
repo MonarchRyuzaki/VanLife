@@ -7,7 +7,7 @@ import {
 import About from "./Pages/About";
 import Home from "./Pages/Home";
 import HostLayout from "./Pages/HostLayout";
-import Login, { loginLoader } from "./Pages/Login";
+import Login, { action as loginAction, loginLoader } from "./Pages/Login";
 import Vans, { loader as vansLoader } from "./Pages/Vans";
 import VansDetailed, {
   loader as vansDetailedLoader,
@@ -35,7 +35,7 @@ import ListedVansPricing, {
 } from "./Pages/components/ListedVansPricing";
 import NotFound from "./Pages/components/NotFound";
 import Reviews, { loader as reviewsLoader } from "./Pages/components/Reviews";
-
+// localStorage.clear("loggedIn")
 const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -45,10 +45,17 @@ const router = createHashRouter(
       <Route path="host" element={<HostLayout />}>
         <Route index element={<Dashboard />} loader={dashboardLoader} />
         <Route path="income" element={<Income />} loader={incomeLoader} />
-        <Route path="vans" element={<ListedVans />} loader={listedVansLoader} />
+        <Route
+          path="vans"
+          element={<ListedVans />}
+          loader={listedVansLoader}
+          errorElement={<Error />}
+        />
         <Route
           path="vans/:id"
-          element={<ListedVansDetails/>} loader={listedVansDetailsLoader}
+          element={<ListedVansDetails />}
+          loader={listedVansDetailsLoader}
+          errorElement={<Error />}
         >
           <Route
             index
@@ -82,7 +89,12 @@ const router = createHashRouter(
         loader={vansDetailedLoader}
         errorElement={<Error />}
       />
-      <Route path="login" element={<Login />} loader = {loginLoader}/>
+      <Route
+        path="login"
+        element={<Login />}
+        loader={loginLoader}
+        action={loginAction}
+      />
       <Route path="*" element={<NotFound />} />
     </Route>
   )

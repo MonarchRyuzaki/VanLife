@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
-import { Link, useLoaderData, useSearchParams } from "react-router-dom";
+import { Suspense, useEffect, useState } from "react";
+import {
+  Await,
+  Link,
+  defer,
+  useLoaderData,
+  useSearchParams,
+} from "react-router-dom";
+import { requireAuth } from "../utils";
 import Buttons from "./components/Buttons";
 import Card from "./components/Card";
-import { requireAuth } from "../utils";
 
 const getVansData = async () => {
   let response; // Declare response outside the try block
@@ -23,8 +29,10 @@ const getVansData = async () => {
 };
 
 export async function loader() {
-  await requireAuth()
-  return getVansData();
+  const vansPromise = getVansData();
+  return defer({ vansPromise });
+  // Gives us flexibility if we have say useres that we want to absolutely shown when the component is mounted then we can just await it here
+  // then we dont have to make await and suspense component in our component and just leave the data like vansPromise to be resolved in component
 }
 
 const idx = (type) => {
@@ -40,23 +48,20 @@ const initialFilters = [
 ];
 
 function Vans() {
-  const allData = useLoaderData();
+  const { vansPromise } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const typeFilters = searchParams.get("type")?.split(",") || []; // Extract multiple filters
   const [isActive, setIsActive] = useState(initialFilters);
-  const displayedVans =
-    typeFilters.length > 0
-      ? allData.filter((c) => typeFilters.includes(c.type.toLowerCase()))
-      : allData;
   useEffect(() => {
-    localStorage.clear("filterStates")
-  },[])
-  return (
-    <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
-      <div className="w-full xl:max-w-[1280px]">
-        <h2 className="text-[#161616] font-inter text-2xl font-bold mt-4">
-          Explore our van options
-        </h2>
+    localStorage.clear("filterStates");
+  }, []);
+  const renderData = (allData) => {
+    const displayedVans =
+      typeFilters.length > 0
+        ? allData.filter((c) => typeFilters.includes(c.type.toLowerCase()))
+        : allData;
+    return (
+      <>
         <div id="filters" className="flex justify-between mt-6">
           <div className="w-full flex flex-col gap-6 xs:flex-row">
             <div className="flex justify-between gap-6">
@@ -118,6 +123,20 @@ function Vans() {
             return <Card {...obj} key={obj.id} searchParams={searchParams} />;
           })}
         </div>
+      </>
+    );
+  };
+  return (
+    <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
+      <div className="w-full xl:max-w-[1280px]">
+        <h2 className="text-[#161616] font-inter text-2xl font-bold mt-4">
+          Explore our van options
+        </h2>
+        <Suspense fallback={<h2>Loading ....</h2>}>
+          {" "}
+          {/* fallback will show the thing which will be showed until the promsise is resolved */}
+          <Await resolve={vansPromise}>{renderData}</Await>
+        </Suspense>
       </div>
     </div>
   );

@@ -1,12 +1,30 @@
 import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
+// import { initializeApp } from "firebase/app";
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
+
+// Import the functions you need from the SDKs you need
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// const firebaseConfig = {
+//   apiKey: "AIzaSyD8ncsPOWzM0tocjbR26lUKaso5Bi43Lus",
+//   authDomain: "vanlifefreecodecamp.firebaseapp.com",
+//   projectId: "vanlifefreecodecamp",
+//   storageBucket: "vanlifefreecodecamp.appspot.com",
+//   messagingSenderId: "814674614102",
+//   appId: "1:814674614102:web:15e3ab71f349e24952e8f7"
+// };
+
+// Initialize Firebase
+// const firebaseApp = initializeApp(firebaseConfig);
 
 const vans = [
   {

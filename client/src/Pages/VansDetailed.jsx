@@ -1,5 +1,12 @@
-import { useEffect, useState } from "react";
-import { Link, useLoaderData, useLocation, useParams } from "react-router-dom";
+import { Suspense, useEffect, useState } from "react";
+import {
+  Link,
+  defer,
+  useLoaderData,
+  useLocation,
+  useParams,
+  Await
+} from "react-router-dom";
 import { requireAuth } from "../utils";
 
 const fetchData = async (id) => {
@@ -19,26 +26,26 @@ const fetchData = async (id) => {
 };
 
 export async function loader({ params }) {
-  await requireAuth()
-  return fetchData(params.id);
+  await requireAuth();
+  return defer({ vansPromise: fetchData(params.id) });
 }
 
 function VansDetailed() {
-  const vanData = useLoaderData();
+  const { vansPromise } = useLoaderData();
   const { state } = useLocation();
   const search = state ? (state.search.length > 0 ? state.search : "") : "";
   const backLink = `..?${search}`;
   const backText = state ? (state.type.length > 0 ? state.type : "") : "";
-  let bgColor;
-  if (vanData.type === "simple") {
-    bgColor = "#E17654";
-  } else if (vanData.type === "luxury") {
-    bgColor = "#161616";
-  } else if (vanData.type === "rugged") {
-    bgColor = "#115E59";
-  }
-  return (
-    <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
+  const renderData = (vanData) => {
+    let bgColor;
+    if (vanData.type === "simple") {
+      bgColor = "#E17654";
+    } else if (vanData.type === "luxury") {
+      bgColor = "#161616";
+    } else if (vanData.type === "rugged") {
+      bgColor = "#115E59";
+    }
+    return (
       <div className="w-full xl:max-w-[1280px]">
         <Link
           to={backLink}
@@ -80,6 +87,15 @@ function VansDetailed() {
           </div>
         </div>
       </div>
+    );
+  };
+  return (
+    <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
+      <Suspense fallback={<h2>Loading ....</h2>}>
+        <Await resolve = {vansPromise}>
+          {renderData}
+        </Await>
+      </Suspense>
     </div>
   );
 }

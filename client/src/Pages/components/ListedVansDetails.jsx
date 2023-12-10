@@ -1,30 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useLoaderData, useParams } from "react-router-dom";
+import React, { Suspense, useEffect, useState } from "react";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  defer,
+  useLoaderData,
+  useParams,
+  Await
+} from "react-router-dom";
 import { requireAuth } from "../../utils";
 
-
 const fetchData = async (id) => {
-  const response = await fetch("https://vanlife-backend.onrender.com/api/hosts/vans/" + id);
+  const response = await fetch(
+    "https://vanlife-backend.onrender.com/api/hosts/vans/" + id
+  );
   if (response.ok) {
     const res = await response.json();
-    return res.van
+    return res.van;
   }
 };
 
-export async function loader({params}){
-  await requireAuth()
-  return fetchData(params.id);
+export async function loader({ params, request }) {
+  await requireAuth(request);
+  return defer({ vansPromise: fetchData(params.id) });
 }
 
 const ListedVansDetails = () => {
-  const data = useLoaderData()
+  const { vansPromise } = useLoaderData();
   const activeStyle = {
     color: "#161616",
     fontWeight: 600,
     textDecoration: "underline",
   };
-  return (
-    <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
+  const renderData = (data) => {
+    return (
       <div className="w-full xl:max-w-[1280px]">
         <Link
           to=".."
@@ -76,9 +85,18 @@ const ListedVansDetails = () => {
               Photos
             </NavLink>
           </div>
-          <Outlet context={{...data}}/>
+          <Outlet context={{ ...data }} />
         </div>
       </div>
+    );
+  };
+  return (
+    <div className="bg-[#FFF7ED] flex justify-center items-start px-6 sm:px-16 min-h-[100vh]">
+      <Suspense fallback={<h2>Loading .....</h2>}>
+        <Await resolve={vansPromise}>
+          {renderData}
+        </Await>
+      </Suspense>
     </div>
   );
 };
